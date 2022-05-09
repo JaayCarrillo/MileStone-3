@@ -1,0 +1,264 @@
+Joseph Carrillo 
+CST-150 C# I 
+MileStone 3
+05/08/22
+
+
+namespace Inventory_Management
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+
+            InventoryManager i1 = new InventoryManager();
+            int ch;
+
+            for (; ; )
+            {
+
+                Console.WriteLine("1.Add item");
+                Console.WriteLine("2.Display item");
+                Console.WriteLine("3.Remove item");
+                Console.WriteLine("4.Search item by name");
+                Console.WriteLine("5.Search item by price");
+                Console.WriteLine("6.Edit/Re-stock item");
+                Console.WriteLine("7.Exit");
+
+
+                Console.WriteLine("Select choice from 1-7: ");
+                ch = Convert.ToInt32(Console.ReadLine());
+
+
+                switch (ch)
+                {
+                    case 1:
+                        i1.addItem();
+                        break;
+                    case 2:
+                        i1.displayItem();
+                        break;
+
+                    case 3:
+                        i1.removeItem();
+                        break;
+                    case 4:
+                        Console.WriteLine("Enter item name to search ");
+                        string n = Console.ReadLine();
+                        i1.searchItemByName(n);
+                        break;
+
+                    case 5:
+
+                        Console.WriteLine("Enter price to search ");
+                        double d = Convert.ToDouble(Console.ReadLine());
+                        i1.searchItemByPrice(d);
+                        break;
+
+                    case 6:
+                        Console.WriteLine("Enter item name to edit stock ");
+                        string n2 = Console.ReadLine();
+
+                        i1.editItem(n2);
+                        break;
+
+                    case 7:
+                        Environment.Exit(0);
+                        break;
+
+                }
+
+            }
+
+
+
+        }
+    }
+
+
+    class InventoryManager
+    {
+
+        //List collection
+        List<Item> l1 = new List<Item>();
+
+        public void addItem()
+        {
+            string Name;
+            double Price;
+            int Quantity;
+
+
+            Console.WriteLine("Enter item name ");
+            Name = Console.ReadLine();
+            Console.WriteLine("----------");
+
+            Console.WriteLine("Enter item price ");
+            Price = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("----------");
+
+            Console.WriteLine("Enter item quantity ");
+            Quantity = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("----------");
+            Item i = new Item(Name, Price, Quantity); //CREATING NEW ITEM
+            Console.WriteLine("---------------------------------------------");
+            l1.Add(i);//ADDING ITEM TO LIST
+
+        }
+
+        public void displayItem()
+        {
+
+            string s = String.Format("{0,10}{1,10}{2,10}", "name", "price", "quantity");
+            Console.WriteLine(s + "\n");
+            Console.WriteLine("---------------------------------------------------------");
+
+            foreach (Item i in l1)
+            {
+
+                string s1 = String.Format("{0,10}{1,10}{2,10}", i.Name, i.Price, i.Qty);
+                Console.WriteLine(s1 + "\n");
+                Console.WriteLine("---------------------------------------------------------");
+            }
+
+
+        }
+
+        public void removeItem()
+        {
+
+            Console.WriteLine("Enter item name to remove ");
+            string n = Console.ReadLine();
+
+            int flag = 0;
+
+            //SCANNING LIST COLLECTION
+            for (int i = 0; i < l1.Count; i++)
+            {
+                //CHECKING WHETHER USER GIVEN NAME IS EQUAL TO THE CURRENT ITEMS NAME
+                //OR NOT
+                if (l1[i].Name.Equals(n)) //IF FOUND THE ITEM
+                {
+                    l1.RemoveAt(i);//REMOVE THE ITEM ON THAT INDEX
+                    Console.WriteLine("Item removed");
+                    flag = 1;
+                }
+            }
+
+            if (flag == 0)
+                Console.WriteLine("Item not found");
+
+        }
+
+        //SEARCH ITEM BY NAME
+        public void searchItemByName(string n)
+        {
+
+            int flag = 0;
+            //DISPLAY HEADING
+            string s = String.Format("{0,10}{1,10}{2,10}", "name", "price", "quantity");
+            Console.WriteLine(s + "\n");
+
+            //SCANNING TOTAL LIST
+            foreach (Item i in l1)
+            {
+
+                //IF USER GIVEN NAME FOUND
+                if (i.Name.Equals(n))
+                {
+                    //DISPLAY THE DETAILS
+                    string s1 = String.Format("{0,10}{1,10}{2,10}", i.Name, i.Price, i.Qty);
+                    Console.WriteLine(s1 + "\n");
+                    flag = 1;
+                }
+
+            }
+
+            if (flag == 0)
+                Console.WriteLine("Item not found");
+
+
+        }
+
+        //SEARCH ITEM BY PRICE
+        public void searchItemByPrice(double p)
+        {
+
+            int flag = 0;
+            string s = String.Format("{0,10}{1,10}{2,10}", "name", "price", "quantity");
+            Console.WriteLine(s + "\n");
+
+            //SCANNING TOTAL LIST
+            foreach (Item i in l1)
+            {
+
+                //IF USER GIVEN PRICE FOUND
+                if (i.Price == p)
+                {
+                    //DISPLAY THAT ITEM
+                    string s1 = String.Format("{0,10}{1,10}{2,10}", i.Name, i.Price, i.Qty);
+                    Console.WriteLine(s1 + "\n");
+                    flag = 1;
+                }
+
+            }
+
+            if (flag == 0)
+                Console.WriteLine("Item not found");
+
+        }
+
+
+        public void editItem(string n)
+        {
+
+
+            Console.WriteLine("Enter new stock quantity for this item ");
+            string n2 = Console.ReadLine();
+
+            int q = Convert.ToInt32(n2);
+
+            //SCANNING EACH ITEM
+            foreach (Item i in l1)
+            {
+
+
+                if (i.Name.Equals(n))//IF ITEM FOUND
+                {
+                    i.Qty = q;//CHANGING THE QUANTITY
+                    Console.WriteLine("quantity updated");
+                }
+
+            }
+
+        }
+
+    }
+
+    class Item
+    {
+
+        //INSTANCE VARIABLES
+        string name;
+        double price;
+        int qty;
+
+        //CONSTRUCTOR
+        public Item(string n, double p, int q)
+        {
+            Name = n;
+            Price = p;
+            Qty = q;
+
+        }
+
+        //GETTER AND SETTER
+        public string Name { get => name; set => name = value; }
+        public double Price { get => price; set => price = value; }
+        public int Qty { get => qty; set => qty = value; }
+
+
+    }
+
+}
